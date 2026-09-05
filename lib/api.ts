@@ -106,7 +106,25 @@ export function predictPrice(
   payload: PredictionRequest,
   signal?: AbortSignal,
 ): Promise<PredictionResponse> {
-  return postJson<PredictionResponse>('/predict', payload, signal)
+  const backendPayload = {
+    overall_qual: payload.overall_qual,
+    year_built: payload.year_built,
+    living_area: payload.living_area,
+    basement_area: payload.basement_area,
+    first_floor: payload.first_floor,
+    fireplaces: payload.fireplaces,
+    garage_cars: payload.garage_cars,
+    full_bath: payload.full_bath,
+    half_bath: payload.half_bath,
+    exterior_quality: payload.exterior_quality,
+    kitchen_quality: payload.kitchen_quality,
+  }
+
+  return postJson<PredictionResponse>(
+    '/predict',
+    backendPayload,
+    signal,
+  )
 }
 
 /** Request valuations for a batch of comparison scenarios. */

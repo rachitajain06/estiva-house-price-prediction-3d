@@ -1,33 +1,126 @@
-# estiva-house-price-prediction-3d
+🏠 ESTIVA — Smart Home Price Estimation
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
+ESTIVA is a machine-learning based web application that estimates house prices from property characteristics using a trained XGBoost regression model.
 
-## Built with v0
+It combines a Next.js frontend, FastAPI backend, and XGBoost model to provide an interactive house price estimation experience.
 
-This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
+Note: ESTIVA provides model-based estimates using historical housing data and is intended for educational and analytical purposes.
 
-[Continue working on v0 →](https://v0.app/chat/projects/prj_v8aNP7s0JrOxppBAAdJGF1mDxyKl)
+✨ Features
+🏠 Interactive house price prediction
+🤖 XGBoost regression model
+⚡ FastAPI backend
+⚛️ Next.js + React frontend
+🔬 Scenario comparison through Scenario Lab
+📊 Model performance and feature insights
+📱 Responsive modern UI
+🛠️ Technology Stack
+Machine Learning & Data
+Python
+Pandas
+NumPy
+Scikit-learn
+XGBoost
+Joblib
+Backend
+FastAPI
+Pydantic
+Uvicorn
+Frontend
+Next.js
+React
+TypeScript
+Tailwind CSS
+📁 Project Structure
+estiva-house-price-prediction-3d/
+│
+├── app/
+│   ├── about/
+│   ├── estimate/
+│   ├── insights/
+│   ├── scenario-lab/
+│   └── page.tsx
+│
+├── components/
+│   ├── brand/
+│   ├── estimate/
+│   ├── insights/
+│   ├── layout/
+│   ├── overview/
+│   ├── scenario/
+│   ├── shared/
+│   └── ui/
+│
+├── lib/
+│   ├── api.ts
+│   ├── model-data.ts
+│   ├── nav.ts
+│   ├── prediction-history.ts
+│   └── utils.ts
+│
+├── backend/
+│   ├── models/
+│   │   ├── default_feature_values.pkl
+│   │   ├── feature_columns.pkl
+│   │   └── final_xgboost_house_price_model.pkl
+│   ├── main.py
+│   ├── predictor.py
+│   └── requirements.txt
+│
+├── public/
+├── .gitignore
+├── package.json
+└── README.md
+📊 Model Performance
+Metric	Value
+Model	XGBoost
+Validation R²	91.2%
+RMSE	$25,978
+MAE	$15,671
+Features	260
+Training Homes	1,460
+🔄 How It Works
 
-## Getting Started
+Property Details
+↓
+Next.js / React Frontend
+↓
+FastAPI Prediction API
+↓
+Feature Processing
+↓
+Trained XGBoost Model
+↓
+Estimated House Price
 
-First, run the development server:
+🚀 Run Locally
+1. Install frontend dependencies
+npm install
+2. Create .env.local
 
-```bash
+Create a .env.local file in the project root:
+
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
+3. Start the backend
+
+Open a terminal in the project root:
+
+cd backend
+uvicorn main:app --reload --port 8000
+4. Start the frontend
+
+Open a new terminal in the project root:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+http://localhost:3000
+⚠️ Disclaimer
 
-## Learn More
+ESTIVA is an educational machine learning project. Predictions are generated from historical housing data and may not reflect current real-world market prices. They should not be considered professional real-estate valuations.
 
-To learn more, take a look at the following resources:
+👩‍💻 Author
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
+Rachita Jain
+B.Tech — Data Science

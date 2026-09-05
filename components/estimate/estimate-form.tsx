@@ -1,11 +1,21 @@
 'use client'
 
 import { useState } from 'react'
+
 import { Sparkles, RotateCcw } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card'
+
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Spinner } from '@/components/ui/spinner'
+
 import {
   Select,
   SelectContent,
@@ -14,13 +24,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { SliderField, NumberField } from '@/components/shared/form-fields'
+
+import {
+  SliderField,
+  NumberField,
+} from '@/components/shared/form-fields'
+
 import {
   PredictionResult,
   type ResultState,
 } from '@/components/estimate/prediction-result'
-import { predictPrice, ApiError, type PredictionRequest, type QualityCode } from '@/lib/api'
-import { QUALITY_OPTIONS, formatNumber } from '@/lib/model-data'
+
+import {
+  predictPrice,
+  ApiError,
+  type PredictionRequest,
+  type QualityCode,
+} from '@/lib/api'
+
+import {
+  QUALITY_OPTIONS,
+} from '@/lib/model-data'
+
 import { usePredictionHistory } from '@/lib/prediction-history'
 
 const DEFAULTS: PredictionRequest = {
@@ -39,34 +64,55 @@ const DEFAULTS: PredictionRequest = {
 
 export function EstimateForm() {
   const [form, setForm] = useState<PredictionRequest>(DEFAULTS)
-  const [state, setState] = useState<ResultState>({ status: 'idle' })
+
+  const [state, setState] = useState<ResultState>({
+    status: 'idle',
+  })
+
   const { addEntry } = usePredictionHistory()
 
   function update<K extends keyof PredictionRequest>(
     key: K,
     value: PredictionRequest[K],
   ) {
-    setForm((prev) => ({ ...prev, [key]: value }))
+    setForm((prev) => ({
+      ...prev,
+      [key]: value,
+    }))
   }
 
   async function runPrediction() {
-    setState({ status: 'loading' })
+    setState({
+      status: 'loading',
+    })
+
     try {
       const result = await predictPrice(form)
+
       const snapshot = {
         overallQual: form.overall_qual,
         livingArea: form.living_area,
         yearBuilt: form.year_built,
         garageCars: form.garage_cars,
       }
-      setState({ status: 'success', result, snapshot })
+
+      setState({
+        status: 'success',
+        result,
+        snapshot,
+      })
+
       addEntry(form, result)
     } catch (err) {
       const message =
         err instanceof ApiError
           ? err.message
           : 'An unexpected error occurred while contacting the prediction service.'
-      setState({ status: 'error', message })
+
+      setState({
+        status: 'error',
+        message,
+      })
     }
   }
 
@@ -77,25 +123,36 @@ export function EstimateForm() {
 
   function handleReset() {
     setForm(DEFAULTS)
-    setState({ status: 'idle' })
+    setState({
+      status: 'idle',
+    })
   }
 
   const isLoading = state.status === 'loading'
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.35fr_1fr] lg:items-start">
+    <div className="flex flex-col gap-6">
+
+      {/* Property Form */}
       <Card>
         <CardHeader className="border-b">
           <CardTitle className="font-display text-lg font-bold">
             Property characteristics
           </CardTitle>
+
           <CardDescription>
             Provide the details below. All fields feed directly into the model.
           </CardDescription>
         </CardHeader>
+
         <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-7">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-7"
+          >
             <div className="grid gap-x-6 gap-y-6 sm:grid-cols-2">
+
+              {/* Overall Quality */}
               <SliderField
                 id="overall_qual"
                 label="Overall Quality"
@@ -106,6 +163,8 @@ export function EstimateForm() {
                 onChange={(v) => update('overall_qual', v)}
                 formatValue={(v) => `${v}/10`}
               />
+
+              {/* Year Built */}
               <NumberField
                 id="year_built"
                 label="Year Built"
@@ -115,6 +174,8 @@ export function EstimateForm() {
                 value={form.year_built}
                 onChange={(v) => update('year_built', v)}
               />
+
+              {/* Living Area */}
               <NumberField
                 id="living_area"
                 label="Living Area"
@@ -126,6 +187,8 @@ export function EstimateForm() {
                 value={form.living_area}
                 onChange={(v) => update('living_area', v)}
               />
+
+              {/* Basement Area */}
               <NumberField
                 id="basement_area"
                 label="Basement Area"
@@ -137,6 +200,8 @@ export function EstimateForm() {
                 value={form.basement_area}
                 onChange={(v) => update('basement_area', v)}
               />
+
+              {/* 1st Floor */}
               <NumberField
                 id="first_floor"
                 label="1st Floor Area"
@@ -148,6 +213,8 @@ export function EstimateForm() {
                 value={form.first_floor}
                 onChange={(v) => update('first_floor', v)}
               />
+
+              {/* Fireplaces */}
               <SliderField
                 id="fireplaces"
                 label="Fireplaces"
@@ -157,6 +224,8 @@ export function EstimateForm() {
                 value={form.fireplaces}
                 onChange={(v) => update('fireplaces', v)}
               />
+
+              {/* Garage */}
               <SliderField
                 id="garage_cars"
                 label="Garage Capacity"
@@ -166,6 +235,8 @@ export function EstimateForm() {
                 value={form.garage_cars}
                 onChange={(v) => update('garage_cars', v)}
               />
+
+              {/* Full Bathrooms */}
               <SliderField
                 id="full_bath"
                 label="Full Bathrooms"
@@ -175,6 +246,8 @@ export function EstimateForm() {
                 value={form.full_bath}
                 onChange={(v) => update('full_bath', v)}
               />
+
+              {/* Half Bathrooms */}
               <SliderField
                 id="half_bath"
                 label="Half Bathrooms"
@@ -184,21 +257,39 @@ export function EstimateForm() {
                 value={form.half_bath}
                 onChange={(v) => update('half_bath', v)}
               />
+
+              {/* Exterior Quality */}
               <div className="flex flex-col gap-2">
-                <Label htmlFor="exterior_quality" className="text-sm font-medium">
+                <Label
+                  htmlFor="exterior_quality"
+                  className="text-sm font-medium"
+                >
                   Exterior Quality
                 </Label>
+
                 <Select
                   value={form.exterior_quality}
-                  onValueChange={(v) => update('exterior_quality', v as QualityCode)}
+                  onValueChange={(v) =>
+                    update(
+                      'exterior_quality',
+                      v as QualityCode,
+                    )
+                  }
                 >
-                  <SelectTrigger id="exterior_quality" className="w-full">
+                  <SelectTrigger
+                    id="exterior_quality"
+                    className="w-full"
+                  >
                     <SelectValue />
                   </SelectTrigger>
+
                   <SelectContent>
                     <SelectGroup>
                       {QUALITY_OPTIONS.map((opt) => (
-                        <SelectItem key={opt.value} value={opt.value}>
+                        <SelectItem
+                          key={opt.value}
+                          value={opt.value}
+                        >
                           {opt.label}
                         </SelectItem>
                       ))}
@@ -206,21 +297,39 @@ export function EstimateForm() {
                   </SelectContent>
                 </Select>
               </div>
+
+              {/* Kitchen Quality */}
               <div className="flex flex-col gap-2">
-                <Label htmlFor="kitchen_quality" className="text-sm font-medium">
+                <Label
+                  htmlFor="kitchen_quality"
+                  className="text-sm font-medium"
+                >
                   Kitchen Quality
                 </Label>
+
                 <Select
                   value={form.kitchen_quality}
-                  onValueChange={(v) => update('kitchen_quality', v as QualityCode)}
+                  onValueChange={(v) =>
+                    update(
+                      'kitchen_quality',
+                      v as QualityCode,
+                    )
+                  }
                 >
-                  <SelectTrigger id="kitchen_quality" className="w-full">
+                  <SelectTrigger
+                    id="kitchen_quality"
+                    className="w-full"
+                  >
                     <SelectValue />
                   </SelectTrigger>
+
                   <SelectContent>
                     <SelectGroup>
                       {QUALITY_OPTIONS.map((opt) => (
-                        <SelectItem key={opt.value} value={opt.value}>
+                        <SelectItem
+                          key={opt.value}
+                          value={opt.value}
+                        >
                           {opt.label}
                         </SelectItem>
                       ))}
@@ -228,9 +337,12 @@ export function EstimateForm() {
                   </SelectContent>
                 </Select>
               </div>
+
             </div>
 
+            {/* Action Buttons */}
             <div className="flex flex-col-reverse gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+
               <Button
                 type="button"
                 variant="ghost"
@@ -240,22 +352,36 @@ export function EstimateForm() {
                 <RotateCcw data-icon="inline-start" />
                 Reset
               </Button>
-              <Button type="submit" size="lg" disabled={isLoading}>
+
+              <Button
+                type="submit"
+                size="lg"
+                disabled={isLoading}
+              >
                 {isLoading ? (
                   <Spinner data-icon="inline-start" />
                 ) : (
                   <Sparkles data-icon="inline-start" />
                 )}
+
                 Calculate estimated value
               </Button>
+
             </div>
           </form>
         </CardContent>
       </Card>
 
-      <div className="lg:sticky lg:top-6">
-        <PredictionResult state={state} onRetry={() => void runPrediction()} />
-      </div>
+      {/* Prediction Result */}
+      {state.status !== 'idle' && (
+        <div className="w-full">
+          <PredictionResult
+            state={state}
+            onRetry={() => void runPrediction()}
+          />
+        </div>
+      )}
+
     </div>
   )
 }
